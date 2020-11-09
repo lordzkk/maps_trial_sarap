@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">maps</string>
+    <string name="map_key" translatable="false">AIzaSyBEefZv1hv-OPtaYwObtwZVaPtlOB46UlA</string>
+    <string name="addres_text">Name: %1$s \n Address: %2$s \n Timestamp: %3$tr</string>
+</resources>
