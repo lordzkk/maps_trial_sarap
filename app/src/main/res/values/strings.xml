@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">maps</string>
     <string name="map_key" translatable="false">AIzaSyBEefZv1hv-OPtaYwObtwZVaPtlOB46UlA</string>
+    <string name="map_key2" translatable="false">AIzaSyCPJ0Aw9X2WgYmC2hHvxeqJE6lDJJt8MFw</string>
 </resources>

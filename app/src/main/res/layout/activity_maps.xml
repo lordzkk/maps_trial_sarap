@@ -7,15 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".Maps">
 
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        tools:layout_editor_absoluteX="34dp" />
 
-
-    <com.google.android.material.textfield.TextInputEditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/placeori"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
@@ -41,11 +42,76 @@
 
     <Button
         android:id="@+id/amikom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="260dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="32dp"
         android:text="Amikom Purwokerto"
         app:layout_constraintBottom_toBottomOf="@+id/map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:text="Menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/routes"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/routes"
+        android:layout_width="99dp"
+        android:layout_height="49dp"
+        android:layout_marginEnd="84dp"
+        android:layout_marginRight="84dp"
+        android:layout_marginBottom="80dp"
+        android:text="Routes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/menubar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/restourant"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/dish" />
+
+        <ImageButton
+            android:id="@+id/gast"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="#ffffff"
+            android:scaleType="fitCenter"
+            android:src="@drawable/gas_station" />
+
+        <ImageButton
+            android:id="@+id/schol"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="#ffffff"
+            android:scaleType="fitCenter"
+            android:src="@drawable/graduation_hat" />
+
+        <ImageButton
+            android:id="@+id/hospit"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="#ffffff"
+            android:scaleType="fitCenter"
+            android:src="@drawable/first_aid_kit" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

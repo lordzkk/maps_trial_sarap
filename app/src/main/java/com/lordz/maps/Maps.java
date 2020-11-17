@@ -1,22 +1,25 @@
 package com.lordz.maps;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -31,6 +34,7 @@ import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,11 +45,12 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
     private GoogleMap mMap;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
-    String lok1, lok2;
-    TextInputEditText tempat1, tempat2;
-    LatLng mDestination, mOrigin;
-    SwipeRefreshLayout swipeRefreshLayout;
-    Button amikom;
+    double lok1, lok2;
+    TextInputEditText  tempat2;
+    TextInputLayout tempat1;
+    LinearLayout mb;
+    ImageView rest,hos,sch,gas;
+    Button amikom,route,menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +58,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         setContentView(R.layout.activity_maps);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
-        tempat1 = (TextInputEditText) findViewById(R.id.placeori);
-        tempat2 = (TextInputEditText) findViewById(R.id.placedes);
 
+        tempat1 = (TextInputLayout) findViewById(R.id.placeori);
+        tempat2 = (TextInputEditText) findViewById(R.id.placedes);
+        mb = findViewById(R.id.menubar);
 
         //Menentukan sebuah lokasi yang tersedia yaitu amikom purwokerto
         amikom = (Button) findViewById(R.id.amikom);
@@ -68,18 +74,79 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
             }
         });
 
-        tempat1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-
+        menu = (Button) findViewById(R.id.menu);
+        menu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handle = false;
+            public void onClick(View v) {
+                mb.setVisibility(View.VISIBLE);
+                route.setVisibility(View.INVISIBLE);
+                amikom.setVisibility(View.INVISIBLE);
+                menu.setVisibility(View.INVISIBLE);
+            }
+        });
 
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchLocationori();
-                    handle = true;
-                }
-                return handle;
+        rest = (ImageView) findViewById(R.id.restourant);
+        rest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lok1 = loc.getLatitude();
+                lok2 =loc.getLongitude();
+                Uri gmmIntentUri = Uri.parse("geo:"+lok1+","+lok2+"?z=10&q=Restaurants");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
+        gas = (ImageView) findViewById(R.id.gast);
+        gas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lok1 = loc.getLatitude();
+                lok2 =loc.getLongitude();
+                Uri gmmIntentUri = Uri.parse("geo:"+lok1+","+lok2+"?z=10&q=Gas");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
+        hos = (ImageView) findViewById(R.id.hospit);
+        hos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lok1 = loc.getLatitude();
+                lok2 =loc.getLongitude();
+                String host= "Hospitals & clinic";
+                Uri gmmIntentUri = Uri.parse("geo:"+lok1+","+lok2+"?z=10&q="+host);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
+        sch = (ImageView) findViewById(R.id.schol);
+        sch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lok1 = loc.getLatitude();
+                lok2 =loc.getLongitude();
+                Uri gmmIntentUri = Uri.parse("geo:"+lok1+","+lok2+"?z=10&q=School");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+        route = (Button) findViewById(R.id.routes);
+        route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+tempat2.getText().toString());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+
             }
         });
 
@@ -119,7 +186,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
                     String lalt = String.valueOf(loc.getLatitude());
                     String lalang = String.valueOf(loc.getLongitude());
-                    tempat1.setText(lalt+" , "+lalang);
+                    tempat1.setPlaceholderText(lalt+" , "+lalang);
 
                 }
             }
@@ -130,10 +197,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        //memilih lokasi yang sudah di tentukan
-        LatLng smkbuk = new LatLng(-7.4267165, 109.4230204);
-        MarkerOptions samsak = new MarkerOptions().position(smkbuk).title("SMK N 1 Bukateja");
-        mMap.addMarker(samsak);
 
         //setting tampilan pada fragment = zoom butn , mylocation,poi
         UiSettings uiSettings = mMap.getUiSettings();
@@ -143,14 +206,16 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         mMap.setOnMyLocationClickListener(this);
         mMap.setOnPoiClickListener(this);
 
-
         // Sets the map type to be "hybrid"
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
         mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
 
+        //memilih lokasi yang sudah di tentukan
+        LatLng smkbuk = new LatLng(-7.4267165, 109.4230204);
+        MarkerOptions samsak = new MarkerOptions().position(smkbuk).title("SMK N 1 Bukateja");
+        mMap.addMarker(samsak);
     }
 
     //pengecekan permision
@@ -163,30 +228,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
                     fetchLocation();
                 }
                 break;
-        }
-    }
-
-    //pengecekan lokasi awal
-    public void searchLocationori() {
-
-        String location1 = tempat1.getText().toString();
-        List<Address> addressList = null;
-        if (location1 != null || !location1.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location1, 1);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title(location1));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-            Toast.makeText(getApplicationContext(), address.getLatitude() + " " + address.getLongitude(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -218,8 +259,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
     @Override
     public boolean onMyLocationButtonClick() {
         mMap.clear();
+        mb.setVisibility(View.INVISIBLE);
         fetchLocation();
         amikom.setVisibility(View.VISIBLE);
+        menu.setVisibility(View.VISIBLE);
+        route.setVisibility(View.VISIBLE);
         return false;
     }
 
